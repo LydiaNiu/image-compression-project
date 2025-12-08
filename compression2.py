@@ -58,4 +58,4 @@ for filename in os.listdir(input_folder):
 
     quantize_image(input_path, output_path, K)
 
-print("\n🎉 Done! All images compressed and saved.")
+print("\nDone! All images compressed and saved.")
