@@ -1,4 +1,3 @@
-[Running] python -u "/Users/user/Desktop/cs105/image-compression-project/Lydia_testing.py"
 
 --- Processing Category: ARCHITECTURE ---
 
@@ -9,8 +8,6 @@
 --- Processing Category: STILL_LIFE ---
 
 --- Processing Category: URBAN ---
-[ WARN:0@854.992] global loadsave.cpp:275 findDecoder imread_('compressed/urban_mod/urb14_K4.jpg'): can't open/read file: check file path/integrity
-  - Missing compressed file for urb14 at K=4. Skipping.
 
 
 #####################################################
@@ -359,6 +356,7 @@
 | urb13      |         4 |  469.353  | 0.7803 |
 | urb13      |         8 |  205.75   | 0.8311 |
 | urb13      |        16 |  298.921  | 0.8312 |
+| urb14      |         4 |  553.798  | 0.6891 |
 | urb14      |         8 |  248.751  | 0.7396 |
 | urb14      |        16 |  435.447  | 0.8249 |
 | urb15      |         4 |  304.324  | 0.7862 |
@@ -389,17 +387,24 @@
 | urb23      |         8 |  178.52   | 0.8728 |
 | urb23      |        16 |  176.683  | 0.9011 |
 
-=====================================================
-### CATEGORY OVERALL PERFORMANCE SUMMARY ###
-=====================================================
-| Category     |   Average MSE |   Average SSIM |
-|:-------------|--------------:|---------------:|
-| architecture |       356.062 |         0.8399 |
-| landscapes   |       345.744 |         0.7799 |
-| portraits    |       276.527 |         0.7857 |
-| still_life   |       305.194 |         0.8464 |
-| urban        |       353.484 |         0.7903 |
-=====================================================
-
-[Done] exited with code=0 in 1049.199 seconds
-
+======================================================================
+### CATEGORY OVERALL PERFORMANCE SUMMARY BY K-VALUE (15 Rows) ###
+======================================================================
+| Category     |   K_Value |   Average MSE |   Average SSIM |
+|:-------------|----------:|--------------:|---------------:|
+| Architecture |         4 |       465.692 |         0.8143 |
+| Architecture |         8 |       163.448 |         0.854  |
+| Architecture |        16 |       439.045 |         0.8513 |
+| Landscapes   |         4 |       499.958 |         0.7273 |
+| Landscapes   |         8 |       211.043 |         0.7996 |
+| Landscapes   |        16 |       326.232 |         0.8128 |
+| Portraits    |         4 |       392.14  |         0.7278 |
+| Portraits    |         8 |       163.606 |         0.8071 |
+| Portraits    |        16 |       273.834 |         0.8223 |
+| Still_Life   |         4 |       362.729 |         0.8119 |
+| Still_Life   |         8 |       160.174 |         0.8429 |
+| Still_Life   |        16 |       392.678 |         0.8843 |
+| Urban        |         4 |       487.118 |         0.7227 |
+| Urban        |         8 |       212.71  |         0.804  |
+| Urban        |        16 |       369.335 |         0.8399 |
+======================================================================
