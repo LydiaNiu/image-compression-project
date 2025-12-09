@@ -81,7 +81,7 @@ def generate_category_matrix(category_name, prefix, k_values, originals_dir="ori
             
             results.append({
                 'Image_ID': image_id,
-                'Image_Num_ID': image_num_id,
+                'Image_Num_ID': image_num_id, # Used for sorting (Requirement 1)
                 'K_Value': K,
                 'MSE': round(mse, 4),
                 'SSIM': round(ssim_score, 4)
