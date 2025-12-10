@@ -9,9 +9,9 @@ import matplotlib.pyplot as plt
 # make sure cv2 is downloaded. Change file input/output names as well as K values below  
 # sometimes it might take a fat minute to load
 #------------------------------------------------------------------------------------------------
-image_path = "input.jpg"  # CHANGE THIS TO THE CORRECT FILE NAME DO NOT FORGET 
+image_path = "/Users/rjiwookim/image-compression-project/originals/portraits/port5.jpg"  # CHANGE THIS TO THE CORRECT FILE NAME DO NOT FORGET 
 output_path = "compressed_image.jpg"  
-K = 32  # MODIFY K  
+K = 8  # MODIFY K  
 image = cv2.imread(image_path)
 if image is None:
     raise FileNotFoundError(f"Could not load image at {image_path}")
