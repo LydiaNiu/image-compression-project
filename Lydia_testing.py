@@ -24,13 +24,13 @@ def calculate_metrics(original_img, compressed_img):
     original_gray = cv2.cvtColor(original_img, cv2.COLOR_BGR2GRAY)
     compressed_gray = cv2.cvtColor(compressed_img, cv2.COLOR_BGR2GRAY)
 
-    # FIX: Only capture the SSIM score, as your skimage version is not returning the tuple (score, diff_map).
     ssim_score = ssim(original_gray, compressed_gray, data_range=255, channel_axis=None)
     
     return mse, ssim_score
 
 # ---------------------------------------------------------------------------------
 
+# This function generates the error matrix for a single category
 def generate_category_matrix(category_name, prefix, k_values, originals_dir="originals", compressed_dir="compressed"):
     """
     Generates the error matrix for a single image category, sorted by image ID and K-Value.
@@ -42,7 +42,7 @@ def generate_category_matrix(category_name, prefix, k_values, originals_dir="ori
     original_path = os.path.join(originals_dir, category_name)
     compressed_mod_path = os.path.join(compressed_dir, f"{category_name}_mod")
     
-    # Finds files (e.g., 'arc1.jpg', 'arc2.jpg')
+    # Finds files with .jpg ending, such as 'arc1.jpg', 'arc2.jpg'
     original_files = glob.glob(os.path.join(original_path, f"{prefix}*.jpg"))
     
     if not original_files:
@@ -76,6 +76,7 @@ def generate_category_matrix(category_name, prefix, k_values, originals_dir="ori
             mse, ssim_score = calculate_metrics(og_image, comp_image)
             
             # Store the numeric part of the ID (e.g., 1, 2, 3) for sorting
+            # This handles file names like arc1, port5, etc.
             image_num_id = int(''.join(filter(str.isdigit, image_id)))
             
             results.append({
@@ -92,12 +93,13 @@ def generate_category_matrix(category_name, prefix, k_values, originals_dir="ori
     df = df.sort_values(by=['Image_Num_ID', 'K_Value']).drop(columns=['Image_Num_ID']).reset_index(drop=True)
     
     return df
+
+
 # ---------------------------------------------------------------------------------
 
-
-# --- Define your configuration ---
-# All K values will be checked
-K_VALUES_TO_CHECK = [4, 8, 16] 
+# Execution starts here
+# we only check K=4 for demonstration purposes
+K_VALUES_TO_CHECK = [4]
 
 CATEGORIES = [
     {'name': 'architecture', 'prefix': 'arc'},
@@ -107,51 +109,28 @@ CATEGORIES = [
     {'name': 'urban', 'prefix': 'urb'},
 ]
 
-# --- Run the generation and collect matrices ---
+# --- Run the generation for all categories ---
 all_matrices = {}
-overall_averages = {}
 
 for cat in CATEGORIES:
     df_matrix = generate_category_matrix(
         category_name=cat['name'],
         prefix=cat['prefix'],
-        k_values=K_VALUES_TO_CHECK
+        k_values=K_VALUES_TO_CHECK # This now only passes [16]
     )
-    
-    if not df_matrix.empty:
-        # Calculate the overall average for the category (Requirement 3)
-        avg_mse = df_matrix['MSE'].mean()
-        avg_ssim = df_matrix['SSIM'].mean()
-        overall_averages[cat['name']] = {'Avg_MSE': round(avg_mse, 4), 'Avg_SSIM': round(avg_ssim, 4)}
-    
     all_matrices[cat['name']] = df_matrix
 
-# --- Display the results and summaries ---
+# --- Display the results ---
 
 print("\n\n#####################################################")
-print("#### DETAILED ERROR MATRIX SUMMARY BY CATEGORY ####")
+print("#### FINAL ERROR MATRIX SUMMARY BY CATEGORY (K=16) ####")
 print("#####################################################")
 
-# Display the detailed matrices
 for category, matrix in all_matrices.items():
-    print(f"\n\n--- DETAILED MATRIX: {category.upper()} (K={K_VALUES_TO_CHECK}) ---")
     if not matrix.empty:
+        print(f"\n\n--- MATRIX FOR: {category.upper()} ---")
+        # Format the output table nicely
         print(matrix.to_markdown(index=False))
     else:
+        print(f"\n\n--- MATRIX FOR: {category.upper()} ---")
         print("No data available for this category.")
-
-# Display the overall summary (Requirement 3)
-print("\n" + "="*53)
-print("### CATEGORY OVERALL PERFORMANCE SUMMARY ###")
-print("="*53)
-
-# Create a DataFrame for the summary table
-summary_df = pd.DataFrame.from_dict(overall_averages, orient='index')
-summary_df.index.name = "Category"
-
-# Rename columns for clarity
-summary_df.columns = ['Average MSE', 'Average SSIM']
-
-# Display the summary table
-print(summary_df.to_markdown())
-print("="*53)
